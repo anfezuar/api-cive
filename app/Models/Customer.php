@@ -9,14 +9,12 @@ class Customer extends Model
 {
     use HasFactory;
 
+    protected $table = 'cliente';
+    protected $primaryKey = 'Cedula';
+
     protected $fillable = [
         'nombre',
-        'telefono'
-    ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at'
+        'telefono',
     ];
 
     /**
@@ -28,7 +26,10 @@ class Customer extends Model
      */
     public function scopeId($query, $id)
     {
-        if($id) return $query->where('id', $id);
+        if ($id) {
+            return $query->where('Cedula', $id);
+        }
+
     }
 
     /**
@@ -40,6 +41,9 @@ class Customer extends Model
      */
     public function scopeNombre($query, $nombre)
     {
-        if($nombre) return $query->where('nombre', 'like', '%'.$nombre.'%');
+        if ($nombre) {
+            return $query->where('nombre', 'like', '%' . $nombre . '%');
+        }
+
     }
 }

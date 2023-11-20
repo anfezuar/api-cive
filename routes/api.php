@@ -1,16 +1,19 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\VehicleController;
-use App\Http\Controllers\API\PriceController;
 use App\Http\Controllers\API\CustomerController;
-use App\Http\Controllers\API\TicketController;
 use App\Http\Controllers\API\DriverController;
 use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\PermissionsController;
+use App\Http\Controllers\API\PriceController;
+use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RemittanceController;
 use App\Http\Controllers\API\ReviewController;
+use App\Http\Controllers\API\SaleCrontroller;
 use App\Http\Controllers\API\SpreadsheetController;
+use App\Http\Controllers\API\TicketController;
+use App\Http\Controllers\API\VehicleController;
+use App\Http\Controllers\DiscountController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,24 +26,34 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('sales', [SaleCrontroller::class, 'index']);
+Route::post('sales/filter', [SaleCrontroller::class, 'filter']);
+
+Route::get('products', [ProductController::class, 'index']);
+Route::post('products/filter', [ProductController::class, 'filter']);
+
 Route::post('/users/login', [AuthController::class, 'login']);
 Route::get('/vehicles/inactive', [VehicleController::class, 'inactive']);
 
-Route::middleware('auth:sanctum')->group(function ()
-{
+Route::get('discounts', [DiscountController::class, 'index']);
+Route::post('discounts', [DiscountController::class, 'store']);
+Route::get('discounts/{id}', [DiscountController::class, 'show']);
+Route::put('discounts/{id}', [DiscountController::class, 'update']);
+Route::delete('discounts/{id}', [DiscountController::class, 'destroy']);
+
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('vehicles', [VehicleController::class, 'index']);
     Route::get('/vehicles/{id}', [VehicleController::class, 'show']);
     Route::post('/vehicles', [VehicleController::class, 'store']);
     Route::put('/vehicles/{id}', [VehicleController::class, 'update']);
     Route::delete('/vehicles/{id}', [VehicleController::class, 'destroy']);
     Route::post('/vehicles/filter', [VehicleController::class, 'filter']);
-    
 
     Route::get('users', [AuthController::class, 'index']);
     Route::put('/users/{id}', [AuthController::class, 'update']);
@@ -109,5 +122,3 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::put('/permissions/{id}', [PermissionsController::class, 'update']);
     Route::delete('/permissions/{id}', [PermissionsController::class, 'destroy']);
 });
-
-
