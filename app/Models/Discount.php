@@ -4,23 +4,38 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Discount extends Model
 {
     use HasFactory;
 
-    protected $table = 'prodescuento';
-    protected $primaryKey = 'referencia';
-    public $timestamps = false;
+    protected $primaryKey = 'product_id';
 
     protected $fillable = [
-        'referencia',
-        'vlrdes',
-        'vlrcondes',
+        'product_id',
+        'discount',
+        'with_discount',
     ];
 
-    public function product()
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $rules = [
+        'product_id' => 'required',
+        'discount' => 'required|numeric',
+        'with_discount' => 'required|numeric',
+    ];
+
+    /**
+     * Get the product associated with the discount.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'referencia');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

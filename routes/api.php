@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CustomerController;
+use App\Http\Controllers\API\DiscountController;
 use App\Http\Controllers\API\DriverController;
 use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\PermissionsController;
@@ -13,7 +14,6 @@ use App\Http\Controllers\API\SaleCrontroller;
 use App\Http\Controllers\API\SpreadsheetController;
 use App\Http\Controllers\API\TicketController;
 use App\Http\Controllers\API\VehicleController;
-use App\Http\Controllers\DiscountController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

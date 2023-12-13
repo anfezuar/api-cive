@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Discount;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,7 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discounts = Discount::all();
-        foreach ($discounts as $discount) {
-            $discount->product;
-        }
-        return $discounts;
+        return Discount::with('product')->paginate(100);
     }
 
     /**
@@ -29,11 +26,13 @@ class DiscountController extends Controller
      */
     public function store(Request $request)
     {
-        $discount = new Discount();
-        $discount->referencia = $request->referencia;
-        $discount->vlrdes = $request->vlrdes;
-        $discount->vlrcondes = $request->vlrcondes;
-        $discount->save();
+        $validatedData = $request->validate([
+            'product_id' => 'required',
+            'discount' => 'required',
+            'with_discount' => 'required',
+        ]);
+
+        Discount::create($validatedData);
     }
 
     /**
@@ -44,7 +43,7 @@ class DiscountController extends Controller
      */
     public function show($id)
     {
-        $discount = Discount::find($id);
+        $discount = Discount::findOrFail($id);
         $discount->product;
         return $discount;
     }
@@ -59,9 +58,9 @@ class DiscountController extends Controller
     public function update(Request $request, $id)
     {
         $discount = Discount::findOrFail($id);
-        $discount->referencia = $id;
-        $discount->vlrdes = $request->vlrdes;
-        $discount->vlrcondes = $request->vlrcondes;
+        $discount->product_id = $request->product_id;
+        $discount->discount = $request->discount;
+        $discount->with_discount = $request->with_discount;
         $discount->save();
     }
 
@@ -73,6 +72,11 @@ class DiscountController extends Controller
      */
     public function destroy($id)
     {
-        Discount::destroy($id);
+        try {
+            Discount::destroy($id);
+            return response()->json(['message' => 'Deletion successful'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Deletion failed'], 500);
+        }
     }
 }
