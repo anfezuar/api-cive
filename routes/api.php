@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\DiscountController;
 use App\Http\Controllers\API\DriverController;
@@ -11,8 +12,10 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RemittanceController;
 use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\SaleCrontroller;
+use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\SpreadsheetController;
 use App\Http\Controllers\API\TicketController;
+use App\Http\Controllers\API\TypeController;
 use App\Http\Controllers\API\VehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +34,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('colors', [ColorController::class, 'index']);
+Route::get('types', [TypeController::class, 'index']);
+Route::get('sizes', [SizeController::class, 'index']);
 
 Route::get('sales', [SaleCrontroller::class, 'index']);
 Route::post('sales/filter', [SaleCrontroller::class, 'filter']);
